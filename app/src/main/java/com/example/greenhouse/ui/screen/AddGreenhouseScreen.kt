@@ -17,7 +17,9 @@ fun AddGreenhouseScreen(
     navController: NavHostController,
     viewModel: AddGreenhouseViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
 ) {
+    var greenhouseId by remember { mutableStateOf("") }
     var greenhouseName by remember { mutableStateOf("") }
+
 
     val isLoading by viewModel.isLoading.collectAsState()
     val success by viewModel.success.collectAsState()
@@ -36,6 +38,31 @@ fun AddGreenhouseScreen(
         contentAlignment = Alignment.Center
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
+
+            if (errorMessage != null) {
+                Text(text = "$errorMessage", color = MaterialTheme.colorScheme.error)
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+
+            TextField(
+                value = greenhouseId,
+                onValueChange = { greenhouseId = it },
+                label = { Text("ID skleníku") },
+                modifier = Modifier.fillMaxWidth(),
+                colors = TextFieldDefaults.colors(
+                    focusedTextColor = DarkGreen,
+                    unfocusedTextColor = DarkGreen,
+                    focusedContainerColor = LightGreen,
+                    unfocusedContainerColor = LightGreen,
+                    cursorColor = DarkGreen,
+                    focusedIndicatorColor = DarkGreen,
+                    unfocusedIndicatorColor = DarkGreen.copy(alpha = 0.5f),
+                    focusedLabelColor = DarkGreen,
+                    unfocusedLabelColor = DarkGreen.copy(alpha = 0.5f)
+                )
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
 
             TextField(
                 value = greenhouseName,
@@ -58,7 +85,7 @@ fun AddGreenhouseScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             Button(
-                onClick = { viewModel.addGreenhouse(greenhouseName) },
+                onClick = { viewModel.addGreenhouse(greenhouseName, greenhouseId.ifBlank { null }) },
                 modifier = Modifier.fillMaxWidth(),
                 enabled = !isLoading,
                 colors = ButtonDefaults.buttonColors(
@@ -67,11 +94,6 @@ fun AddGreenhouseScreen(
                 )
             ) {
                 Text(if (isLoading) "Ukládám..." else "Přidat skleník")
-            }
-
-            if (errorMessage != null) {
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(text = "$errorMessage", color = MaterialTheme.colorScheme.error)
             }
         }
     }

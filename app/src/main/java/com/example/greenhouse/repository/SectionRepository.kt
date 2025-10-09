@@ -29,23 +29,27 @@ class SectionRepository {
                 onUpdate(sections)
             }
     }
-    suspend fun addSection(
-        greenhouseId: String,
-        name: String,
-        plant: String
-    ) {
+    suspend fun addSection(greenhouseId: String, sectionId: String?, name: String, plant: String) {
         val sectionData = hashMapOf(
             "name" to name,
             "plant" to plant,
-            "moisture" to 0f,
-            "water" to 0f
+            "moisture" to 0f
         )
 
-        db.collection("greenhouse")
+        val sectionCollection = db.collection("greenhouse")
             .document(greenhouseId)
             .collection("sections")
-            .add(sectionData)
-            .await()
 
+        if (sectionId.isNullOrBlank()) {
+            sectionCollection.add(sectionData).await()
+        } else {
+            val docRef = sectionCollection.document(sectionId)
+            val snapshot = docRef.get().await()
+
+            if (snapshot.exists()) {
+                throw Exception("Sekce s tímto ID už existuje.")
+            }
+            docRef.set(sectionData).await()
+        }
     }
 }

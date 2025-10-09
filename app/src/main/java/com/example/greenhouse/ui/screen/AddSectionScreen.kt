@@ -18,6 +18,7 @@ fun AddSectionScreen(
     greenhouseId: String,
     viewModel: AddSectionViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
 ) {
+    var sectionId by remember { mutableStateOf("") }
     var sectionName by remember { mutableStateOf("") }
     var plantName by remember { mutableStateOf("") }
 
@@ -38,6 +39,32 @@ fun AddSectionScreen(
         contentAlignment = Alignment.Center
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
+
+            if (errorMessage != null) {
+                Text(errorMessage!!, color = MaterialTheme.colorScheme.error)
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+
+            TextField(
+                value = sectionId,
+                onValueChange = { sectionId = it },
+                label = { Text("ID sekce") },
+                modifier = Modifier.fillMaxWidth(),
+                colors = TextFieldDefaults.colors(
+                    focusedTextColor = DarkGreen,
+                    unfocusedTextColor = DarkGreen,
+                    focusedContainerColor = LightGreen,
+                    unfocusedContainerColor = LightGreen,
+                    cursorColor = DarkGreen,
+                    focusedIndicatorColor = DarkGreen,
+                    unfocusedIndicatorColor = DarkGreen.copy(alpha = 0.5f),
+                    focusedLabelColor = DarkGreen,
+                    unfocusedLabelColor = DarkGreen.copy(alpha = 0.5f)
+                )
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
             TextField(
                 value = sectionName,
                 onValueChange = { sectionName = it },
@@ -79,7 +106,7 @@ fun AddSectionScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             Button(
-                onClick = { viewModel.addSection(greenhouseId, sectionName, plantName) },
+                onClick = { viewModel.addSection(greenhouseId, sectionId, sectionName, plantName) },
                 modifier = Modifier.fillMaxWidth(),
                 enabled = !isLoading,
                 colors = ButtonDefaults.buttonColors(
@@ -88,11 +115,6 @@ fun AddSectionScreen(
                 )
             ) {
                 Text(if (isLoading) "Ukládám..." else "Přidat sekci")
-            }
-
-            if (errorMessage != null) {
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(errorMessage!!, color = MaterialTheme.colorScheme.error)
             }
         }
     }

@@ -21,7 +21,7 @@ class AddSectionViewModel : ViewModel() {
     private val _success = MutableStateFlow(false)
     val success = _success.asStateFlow()
 
-    fun addSection(greenhouseId: String, name: String, plant: String) {
+    fun addSection(greenhouseId: String, sectionId: String, name: String, plant: String) {
         if (name.isBlank()) {
             _errorMessage.value = "Název sekce nesmí být prázdný."
             return
@@ -32,13 +32,17 @@ class AddSectionViewModel : ViewModel() {
                 _isLoading.value = true
                 _errorMessage.value = null
                 withTimeout(10_000L) {
-                    repository.addSection(greenhouseId, name, plant)
+                    repository.addSection(greenhouseId,
+                        sectionId?.ifBlank { null },
+                        name,
+                        plant)
+
                 }
                 _success.value = true
             } catch (e: TimeoutCancellationException) {
                 _errorMessage.value = "Nepodařilo se přidat sekci – zkontrolujte připojení k internetu."
             } catch (e: Exception) {
-                _errorMessage.value = "Nepodařilo se přidat sekci. Zkuste to znovu."
+                _errorMessage.value = e.message
             } finally {
                 _isLoading.value = false
             }

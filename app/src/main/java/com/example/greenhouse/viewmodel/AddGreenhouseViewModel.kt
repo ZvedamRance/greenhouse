@@ -22,7 +22,7 @@ class AddGreenhouseViewModel(
     private val _success = MutableStateFlow(false)
     val success = _success.asStateFlow()
 
-    fun addGreenhouse(name: String) {
+    fun addGreenhouse(name: String, id: String?) {
         if (name.isBlank()) {
             _errorMessage.value = "Název nesmí být prázdný."
             return
@@ -33,13 +33,13 @@ class AddGreenhouseViewModel(
             _errorMessage.value = null
             try {
                 withTimeout(10_000L) {
-                    repository.addGreenhouse(name)
+                    repository.addGreenhouse(name,id)
                 }
                 _success.value = true
             } catch (e: TimeoutCancellationException) {
-                _errorMessage.value = "Nepodařilo se uložit skleník – zkontrolujte připojení."
+                _errorMessage.value = "Nepodařilo se uložit skleník – zkontrolujte připojení k internetu."
             } catch (e: Exception) {
-                _errorMessage.value = "Nepodařilo se uložit skleník. Zkuste to znovu."
+                _errorMessage.value = e.message
             } finally {
                 _isLoading.value = false
             }

@@ -45,9 +45,27 @@ class GreenhouseRepository {
                 }
             }
     }
-    suspend fun addGreenhouse(name: String) {
-        val newGreenhouse = hashMapOf("name" to name)
-        db.collection("greenhouse").add(newGreenhouse).await()
+    suspend fun addGreenhouse(name: String, id: String?) {
+        val greenhouseData = hashMapOf("name" to name)
+
+        if (id.isNullOrBlank()) {
+            db.collection("greenhouse").add(greenhouseData).await()
+        } else {
+            val docRef = db.collection("greenhouse").document(id)
+            val snapshot = docRef.get().await()
+
+            if (snapshot.exists()) {
+                throw Exception("Skleník s tímto ID již existuje.")
+            }
+
+            docRef.set(greenhouseData).await()
+        }
     }
 
+    suspend fun deleteGreenhouse(greenhouseId: String) {
+        db.collection("greenhouse")
+            .document(greenhouseId)
+            .delete()
+            .await()
+    }
 }
