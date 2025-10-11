@@ -95,7 +95,7 @@ fun GreenhouseDetailScreen(
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { /* pridat detaily sekci */ }
+                            .clickable {navController.navigate("section_detail/$greenhouseId/${section.id}") }
                             .padding(4.dp),
                         elevation = CardDefaults.cardElevation(4.dp),
                         colors = CardDefaults.cardColors(containerColor = LightGreen)
@@ -134,9 +134,8 @@ fun GreenhouseDetailScreen(
             confirmButton = {
                 TextButton(
                     onClick = {
-                        detailViewModel.deleteGreenhouse(greenhouseId) {
-                            navController.popBackStack()
-                        }
+                        navController.popBackStack()
+                        detailViewModel.deleteGreenhouse(greenhouseId)
                         showDeleteDialog = false
                     },
                     colors = ButtonDefaults.textButtonColors(

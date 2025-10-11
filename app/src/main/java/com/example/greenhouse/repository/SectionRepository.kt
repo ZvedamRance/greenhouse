@@ -52,4 +52,42 @@ class SectionRepository {
             docRef.set(sectionData).await()
         }
     }
+
+     fun getSectionByID(
+        greenhouseId: String,
+        sectionId: String,
+        onUpdate: (Section?) -> Unit
+    ) {
+        val docRef = db.collection("greenhouse")
+            .document(greenhouseId)
+            .collection("sections")
+            .document(sectionId)
+
+        docRef.addSnapshotListener { snapshot, error ->
+            if (error != null || snapshot == null || !snapshot.exists()) {
+                onUpdate(null)
+                return@addSnapshotListener
+            }
+
+            val section = Section(
+                id = snapshot.id,
+                name = snapshot.getString("name") ?: "",
+                plant = snapshot.getString("plant") ?: "",
+                moisture = snapshot.getDouble("moisture")?.toFloat() ?: 0f,
+                water = snapshot.getDouble("water")?.toFloat() ?: 0f
+            )
+
+            onUpdate(section)
+        }
+    }
+
+    suspend fun deleteSection(greenhouseId: String, sectionId: String) {
+        db.collection("greenhouse")
+            .document(greenhouseId)
+            .collection("sections")
+            .document(sectionId)
+            .delete()
+            .await()
+    }
+
 }

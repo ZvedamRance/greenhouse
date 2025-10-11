@@ -14,6 +14,7 @@ import com.example.greenhouse.ui.screen.AddGreenhouseScreen
 import com.example.greenhouse.ui.screen.AddSectionScreen
 import com.example.greenhouse.ui.screen.GreenhouseDetailScreen
 import com.example.greenhouse.ui.screen.MainScreen
+import com.example.greenhouse.ui.screen.SectionDetailScreen
 
 @Composable
 fun AppNavHost(navController: NavHostController) {
@@ -21,9 +22,9 @@ fun AppNavHost(navController: NavHostController) {
         composable(Screen.Main.route) {
             MainScreen(navController)
         }
-        composable(Screen.GreenhouseList.route) {
+        /*composable(Screen.GreenhouseList.route) {
             GreenhouseListScreen(navController)
-        }
+        }*/
         composable(
             Screen.GreenhouseDetail.route,
             arguments = listOf(navArgument("id") { type = NavType.StringType })
@@ -34,15 +35,30 @@ fun AppNavHost(navController: NavHostController) {
         composable(Screen.AddGreenhouse.route) {
             AddGreenhouseScreen(navController)
         }
-        composable(Screen.Settings.route) {
+        /*composable(Screen.Settings.route) {
             SettingsScreen(navController)
-        }
+        }*/
         composable(
             route = "add_section/{greenhouseId}",
             arguments = listOf(navArgument("greenhouseId") { type = NavType.StringType })
         ) { backStackEntry ->
             val greenhouseId = backStackEntry.arguments?.getString("greenhouseId") ?: ""
             AddSectionScreen(navController, greenhouseId)
+        }
+        composable(
+            "section_detail/{greenhouseId}/{sectionId}",
+            arguments = listOf(
+                navArgument("greenhouseId") { type = NavType.StringType },
+                navArgument("sectionId") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val greenhouseId = backStackEntry.arguments?.getString("greenhouseId")!!
+            val sectionId = backStackEntry.arguments?.getString("sectionId")!!
+            SectionDetailScreen(
+                navController = navController,
+                greenhouseId = greenhouseId,
+                sectionId = sectionId
+            )
         }
     }
 }
