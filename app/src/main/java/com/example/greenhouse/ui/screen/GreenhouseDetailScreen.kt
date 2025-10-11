@@ -103,7 +103,7 @@ fun GreenhouseDetailScreen(
                         Column(modifier = Modifier.padding(16.dp)) {
                             Text(section.name, style = MaterialTheme.typography.titleMedium)
                             Text("Plodina: ${section.plant}")
-                            Text("Vlhkost půdy: ${section.moisture} %")
+                            //Text("Vlhkost půdy: ${section.moisture} %")
                             Text("Zalévat při: ${section.water} %")
                         }
                     }

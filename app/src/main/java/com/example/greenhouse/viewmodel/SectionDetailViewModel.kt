@@ -20,6 +20,9 @@ class SectionDetailViewModel(
 
     val errorMessage = _errorMessage.asStateFlow()
 
+    private val _moisture = MutableStateFlow<Float?>(null)
+    val moisture: StateFlow<Float?> = _moisture
+
     fun observeSection(greenhouseId: String, sectionId: String) {
         repository.getSectionByID(greenhouseId, sectionId) { sec ->
             _section.value = sec
@@ -35,6 +38,13 @@ class SectionDetailViewModel(
             }
         }
     }
+
+    fun observeMoisture(greenhouseId: String, sectionId: String) {
+        repository.observeLatestMoisture(greenhouseId, sectionId) { value ->
+            _moisture.value = value
+        }
+    }
+
 }
 
 

@@ -30,9 +30,12 @@ fun SectionDetailScreen(
     val section by sectionDetailViewModel.section.collectAsState()
     var showDeleteDialog by remember { mutableStateOf(false) }
 
+    val moisture by sectionDetailViewModel.moisture.collectAsState()
+
 
     LaunchedEffect(sectionId) {
         sectionDetailViewModel.observeSection(greenhouseId, sectionId)
+        sectionDetailViewModel.observeMoisture(greenhouseId, sectionId)
     }
 
     Box(
@@ -91,7 +94,7 @@ fun SectionDetailScreen(
                 )
 
                 Text(
-                    text = "Aktuální vlhkost: ${sec.moisture}%",
+                    text = moisture?.let { "Aktuální vlhkost: $it %" } ?: "Aktuální vlhkost: Žádný záznam ze senzoru",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

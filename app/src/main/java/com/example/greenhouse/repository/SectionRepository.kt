@@ -22,7 +22,6 @@ class SectionRepository {
                         id = doc.id,
                         name = doc.getString("name") ?: "",
                         plant = doc.getString("plant") ?: "",
-                        moisture = doc.getDouble("moisture")?.toFloat() ?: 0f,
                         water = doc.getDouble("water")?.toFloat() ?: 0f
                     )
                 }
@@ -73,7 +72,6 @@ class SectionRepository {
                 id = snapshot.id,
                 name = snapshot.getString("name") ?: "",
                 plant = snapshot.getString("plant") ?: "",
-                moisture = snapshot.getDouble("moisture")?.toFloat() ?: 0f,
                 water = snapshot.getDouble("water")?.toFloat() ?: 0f
             )
 
@@ -88,6 +86,30 @@ class SectionRepository {
             .document(sectionId)
             .delete()
             .await()
+    }
+
+    fun observeLatestMoisture(
+        greenhouseId: String,
+        sectionId: String,
+        onUpdate: (Float?) -> Unit
+    ) {
+        db.collection("greenhouse")
+            .document(greenhouseId)
+            .collection("sections")
+            .document(sectionId)
+            .collection("moist_sensor")
+            .orderBy("timestamp")
+            .limitToLast(1)
+            .addSnapshotListener { snapshot, error ->
+                if (error != null || snapshot == null || snapshot.isEmpty) {
+                    onUpdate(null)
+                    return@addSnapshotListener
+                }
+
+                val latest = snapshot.documents.firstOrNull()
+                val moisture = latest?.getDouble("moisture")?.toFloat()
+                onUpdate(moisture)
+            }
     }
 
 }
