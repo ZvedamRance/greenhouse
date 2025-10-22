@@ -21,11 +21,20 @@ class AddSectionViewModel : ViewModel() {
     private val _success = MutableStateFlow(false)
     val success = _success.asStateFlow()
 
-    fun addSection(greenhouseId: String, sectionId: String, name: String, plant: String) {
+    fun addSection(greenhouseId: String, sectionId: String, name: String, plant: String, water: String) {
+
+        val waterInt = water.toIntOrNull()
+
         if (name.isBlank()) {
             _errorMessage.value = "Název sekce nesmí být prázdný."
             return
         }
+
+        if (waterInt == null || waterInt < 0 || waterInt > 100) {
+            _errorMessage.value = "Zadejte celé číslo. Platné hodnoty pro zalévání: 0–100."
+            return
+        }
+
 
         viewModelScope.launch {
             try {
@@ -35,7 +44,8 @@ class AddSectionViewModel : ViewModel() {
                     repository.addSection(greenhouseId,
                         sectionId?.ifBlank { null },
                         name,
-                        plant)
+                        plant,
+                        waterInt)
 
                 }
                 _success.value = true

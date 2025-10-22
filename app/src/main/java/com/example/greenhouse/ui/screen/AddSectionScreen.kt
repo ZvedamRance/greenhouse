@@ -21,6 +21,7 @@ fun AddSectionScreen(
     var sectionId by remember { mutableStateOf("") }
     var sectionName by remember { mutableStateOf("") }
     var plantName by remember { mutableStateOf("") }
+    var waterWhen by remember { mutableStateOf("") }
 
     val isLoading by viewModel.isLoading.collectAsState()
     val success by viewModel.success.collectAsState()
@@ -47,7 +48,9 @@ fun AddSectionScreen(
 
             TextField(
                 value = sectionId,
-                onValueChange = { sectionId = it },
+                onValueChange = {
+                    if (it.length <= 25) sectionId = it
+                },
                 label = { Text("ID sekce") },
                 modifier = Modifier.fillMaxWidth(),
                 colors = TextFieldDefaults.colors(
@@ -67,7 +70,9 @@ fun AddSectionScreen(
 
             TextField(
                 value = sectionName,
-                onValueChange = { sectionName = it },
+                onValueChange = {
+                    if (it.length <= 25) sectionName = it
+                },
                 label = { Text("Název sekce") },
                 modifier = Modifier.fillMaxWidth(),
                 colors = TextFieldDefaults.colors(
@@ -87,8 +92,32 @@ fun AddSectionScreen(
 
             TextField(
                 value = plantName,
-                onValueChange = { plantName = it },
+                onValueChange = {
+                    if (it.length <= 25) plantName = it
+                },
                 label = { Text("Název rostliny") },
+                modifier = Modifier.fillMaxWidth(),
+                colors = TextFieldDefaults.colors(
+                    focusedTextColor = DarkGreen,
+                    unfocusedTextColor = DarkGreen,
+                    focusedContainerColor = LightGreen,
+                    unfocusedContainerColor = LightGreen,
+                    cursorColor = DarkGreen,
+                    focusedIndicatorColor = DarkGreen,
+                    unfocusedIndicatorColor = DarkGreen.copy(alpha = 0.5f),
+                    focusedLabelColor = DarkGreen,
+                    unfocusedLabelColor = DarkGreen.copy(alpha = 0.5f)
+                )
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            TextField(
+                value = waterWhen,
+                onValueChange = {
+                    if (it.length <= 2) waterWhen = it
+                },
+                label = { Text("Zalévat při vlhkosti") },
                 modifier = Modifier.fillMaxWidth(),
                 colors = TextFieldDefaults.colors(
                     focusedTextColor = DarkGreen,
@@ -106,7 +135,7 @@ fun AddSectionScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             Button(
-                onClick = { viewModel.addSection(greenhouseId, sectionId, sectionName, plantName) },
+                onClick = { viewModel.addSection(greenhouseId, sectionId, sectionName, plantName, waterWhen) },
                 modifier = Modifier.fillMaxWidth(),
                 enabled = !isLoading,
                 colors = ButtonDefaults.buttonColors(

@@ -46,7 +46,9 @@ fun AddGreenhouseScreen(
 
             TextField(
                 value = greenhouseId,
-                onValueChange = { greenhouseId = it },
+                onValueChange = {
+                    if (it.length <= 25) greenhouseId = it
+                },
                 label = { Text("ID skleníku") },
                 modifier = Modifier.fillMaxWidth(),
                 colors = TextFieldDefaults.colors(
@@ -66,7 +68,9 @@ fun AddGreenhouseScreen(
 
             TextField(
                 value = greenhouseName,
-                onValueChange = { greenhouseName = it },
+                onValueChange = {
+                    if (it.length <= 25) greenhouseName = it
+                },
                 label = { Text("Název skleníku") },
                 modifier = Modifier.fillMaxWidth(),
                 colors = TextFieldDefaults.colors(
