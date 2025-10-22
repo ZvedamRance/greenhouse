@@ -2,7 +2,9 @@ package com.example.greenhouse.ui.screen
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -13,6 +15,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.greenhouse.ui.theme.LightGreen
 import com.example.greenhouse.ui.theme.Black
+import com.example.greenhouse.ui.theme.DarkGreen
+import com.example.greenhouse.ui.theme.White
 import com.example.greenhouse.viewmodel.MainViewModel
 import com.example.greenhouse.viewmodel.SectionDetailViewModel
 
@@ -41,8 +45,7 @@ fun SectionDetailScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .statusBarsPadding()
-            .padding(WindowInsets.navigationBars.asPaddingValues())
+            .systemBarsPadding()
     ) {
         Column(modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp)) {
 
@@ -109,8 +112,20 @@ fun SectionDetailScreen(
             }
         }
 
-            Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
+        FloatingActionButton(
+            onClick = {navController.navigate("edit_section/$greenhouseId/$sectionId")},
+            containerColor = DarkGreen,
+            contentColor = White,
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(16.dp)
+        ) {
+            Icon(imageVector = Icons.Default.Edit, contentDescription = "Edit section")
+        }
+
+        /* vyskakovaci okna */
 
         if (showDeleteDialog) {
             AlertDialog(

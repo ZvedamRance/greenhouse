@@ -42,8 +42,7 @@ fun GreenhouseDetailScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .statusBarsPadding()
-            .padding(WindowInsets.navigationBars.asPaddingValues())
+            .systemBarsPadding()
     ) {
         Column(modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp)) {
 
@@ -103,7 +102,6 @@ fun GreenhouseDetailScreen(
                         Column(modifier = Modifier.padding(16.dp)) {
                             Text(section.name, style = MaterialTheme.typography.titleMedium)
                             Text("Plodina: ${section.plant}")
-                            //Text("Vlhkost půdy: ${section.moisture} %")
                             Text("Zalévat při: ${section.water} %")
                         }
                     }
@@ -123,7 +121,7 @@ fun GreenhouseDetailScreen(
         }
     }
 
-    /* vyskakovaci okna */
+    /* Vyskakovací okna */
 
     if (showDeleteDialog) {
         AlertDialog(

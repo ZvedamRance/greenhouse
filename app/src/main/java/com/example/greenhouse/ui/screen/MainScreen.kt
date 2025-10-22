@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.greenhouse.ui.theme.DarkGreen
 import com.example.greenhouse.ui.theme.White
@@ -29,14 +30,27 @@ fun MainScreen(navController: NavHostController, viewModel: MainViewModel = view
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .statusBarsPadding()
-            .padding(WindowInsets.navigationBars.asPaddingValues())
+            .systemBarsPadding()
     ) {
-        Column(modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp)) {
-            Spacer(modifier = Modifier.height(16.dp))
-            Text("Skleníky", style = MaterialTheme.typography.headlineMedium)
+        Column(modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp)) {
+
+            Spacer(modifier = Modifier.height(22.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = "Skleníky",
+                    style = MaterialTheme.typography.headlineMedium,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.weight(1f)
+                )
+            }
+
+
             Spacer(modifier = Modifier.height(16.dp))
 
             LazyColumn(

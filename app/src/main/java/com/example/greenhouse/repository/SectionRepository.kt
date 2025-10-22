@@ -28,11 +28,11 @@ class SectionRepository {
                 onUpdate(sections)
             }
     }
-    suspend fun addSection(greenhouseId: String, sectionId: String?, name: String, plant: String) {
+    suspend fun addSection(greenhouseId: String, sectionId: String?, name: String, plant: String, water: Int) {
         val sectionData = hashMapOf(
             "name" to name,
             "plant" to plant,
-            "moisture" to 0f
+            "water" to water
         )
 
         val sectionCollection = db.collection("greenhouse")
@@ -51,6 +51,28 @@ class SectionRepository {
             docRef.set(sectionData).await()
         }
     }
+
+    suspend fun updateSection(
+        greenhouseId: String,
+        sectionId: String,
+        name: String,
+        plant: String,
+        water: Int
+    ) {
+        val sectionRef = db.collection("greenhouse")
+            .document(greenhouseId)
+            .collection("sections")
+            .document(sectionId)
+
+        sectionRef.update(
+            mapOf(
+                "name" to name,
+                "plant" to plant,
+                "water" to water
+            )
+        ).await()
+    }
+
 
      fun getSectionByID(
         greenhouseId: String,
